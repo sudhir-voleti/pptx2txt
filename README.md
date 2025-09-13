@@ -17,6 +17,9 @@ streamlit run https://raw.githubusercontent.com/sudhir-voleti/pptx2txt/main/app1
 
 ## for MarkItDown
 conda create -n streamlit1 python=3.10
+
 conda activate streamlit1
+
 pip install streamlit markitdown[all]
+
 streamlit run https://raw.githubusercontent.com/sudhir-voleti/pptx2txt/main/app2.py
