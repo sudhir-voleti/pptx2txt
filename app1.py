@@ -1,5 +1,6 @@
 import streamlit as st
 from markdownify import markdownify as md
+from bs4 import BeautifulSoup
 import os
 
 st.title("HTML to Markdown Converter")
@@ -11,15 +12,29 @@ if uploaded_file is not None:
     # Read the uploaded HTML file
     html_content = uploaded_file.read().decode("utf-8")
     
-    # Convert HTML to Markdown
+    # Preprocess HTML to remove CSS and irrelevant tags
+    soup = BeautifulSoup(html_content, "html.parser")
+    
+    # Remove unwanted tags (style, script, meta, link, etc.)
+    for tag in soup(["style", "script", "meta", "link", "comment"]):
+        tag.decompose()
+    
+    # Remove inline CSS (style attributes)
+    for tag in soup.find_all(style=True):
+        del tag["style"]
+    
+    # Convert cleaned HTML to string
+    cleaned_html = str(soup)
+    
+    # Convert cleaned HTML to Markdown
     markdown = md(
-        html_content,
+        cleaned_html,
         heading_style="ATX",  # Use # for headings
         table_infer_header=True,  # Auto-detect table headers
         bullets="*",  # Use * for lists
         strong_em_symbol="*",  # Use * for bold/italic
         escape_asterisks=False,  # Preserve Markdown syntax
-        convert=["h1", "h2", "h3", "h4", "h5", "h6", "p", "table", "ul", "ol", "a", "strong", "em"]  # Handle common HTML tags
+        convert=["h1", "h2", "h3", "h4", "h5", "h6", "p", "table", "tr", "th", "td", "ul", "ol", "li", "a", "strong", "em", "blockquote"]  # Handle structural HTML tags
     )
     
     # Display the converted Markdown
