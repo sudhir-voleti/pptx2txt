@@ -1,6 +1,6 @@
 import streamlit as st
 from markdownify import markdownify as md
-import io
+import os
 
 st.title("HTML to Markdown Converter")
 
@@ -29,7 +29,10 @@ if uploaded_file is not None:
     # Allow user to choose file format for download
     file_format = st.selectbox("Download as", ["Markdown (.md)", "Text (.txt)"])
     file_extension = ".md" if file_format == "Markdown (.md)" else ".txt"
-    file_name = f"converted_doc{file_extension}"
+    
+    # Use uploaded file's base name
+    base_name = os.path.splitext(uploaded_file.name)[0]  # Get filename without extension
+    file_name = f"{base_name}_{'md' if file_extension == '.md' else 'txt'}{file_extension}"
     
     # Provide download button
     st.download_button(
@@ -37,4 +40,11 @@ if uploaded_file is not None:
         data=markdown,
         file_name=file_name,
         mime="text/markdown" if file_extension == ".md" else "text/plain"
+    )
+    
+    # Inform user about download location
+    st.info(
+        f"The file will download to your browser's default download folder (e.g., Downloads). "
+        f"To save it in the same directory as your uploaded file ({uploaded_file.name}), "
+        f"move the downloaded file ({file_name}) manually to that location."
     )
