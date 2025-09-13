@@ -12,3 +12,10 @@ pip install python-pptx
 
 ### run below in CLI
 streamlit run https://raw.githubusercontent.com/sudhir-voleti/pptx2txt/main/app.py
+
+## for html2mdtxt
+pip install streamlit markdownify
+
+### run below in CLI
+streamlit run https://raw.githubusercontent.com/sudhir-voleti/pptx2txt/main/app1.py
+
